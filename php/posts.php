@@ -6,9 +6,27 @@ header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Content-Type: application/json');
 
-// GET all posts
+// Get sorting criteria from query parameters
+$sortCriteria = isset($_GET['sort']) ? $_GET['sort'] : 'date_desc';
+
+// Define the sorting order based on the criteria
+switch ($sortCriteria) {
+    case 'date_asc':
+        $orderBy = 'createdAt ASC';
+        break;
+    case 'date_desc':
+        $orderBy = 'createdAt DESC';
+        break;
+    case 'title':
+        $orderBy = 'title ASC';
+        break;
+    default:
+        $orderBy = 'createdAt DESC';
+}
+
+// GET all posts with sorting
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
-    $query = $db->prepare('SELECT * FROM travelposts ORDER BY createdAt DESC');
+    $query = $db->prepare("SELECT * FROM travelposts ORDER BY $orderBy");
     $query->execute();
 
     $posts = $query->fetchAll(PDO::FETCH_ASSOC);
