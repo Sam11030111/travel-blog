@@ -14,6 +14,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { IoFilterCircleOutline } from "react-icons/io5";
 import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { IoArrowUpCircleOutline } from "react-icons/io5";
+import { IoSearchSharp } from "react-icons/io5";
 
 const Cards = () => {
   const { auth } = useContext(AuthContext);
@@ -21,6 +22,7 @@ const Cards = () => {
   const [posts, setPosts] = useState(originalPosts);
   const [sortCriteria, setSortCriteria] = useState("date_desc");
   const [selectedCategoryId, setSelectedCategoryId] = useState("0");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Create a new categories array with "All" included
   const categories = [
@@ -54,6 +56,10 @@ const Cards = () => {
     fetchPosts(category.id, sortCriteria);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
   const getSortButtonTitle = () => {
     switch (sortCriteria) {
       case "date_desc":
@@ -66,6 +72,10 @@ const Cards = () => {
         return "Date Descending";
     }
   };
+
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery)
+  );
 
   return (
     <div className="p-10">
@@ -87,12 +97,16 @@ const Cards = () => {
             ))}
           </ButtonGroup>
           <InputGroup>
-            <InputGroup.Text id="btnGroupAddon">@</InputGroup.Text>
+            <InputGroup.Text id="btnGroupAddon">
+              <IoSearchSharp className="text-lg" />
+            </InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Input group example"
+              placeholder="Search for title..."
               aria-label="Input group example"
               aria-describedby="btnGroupAddon"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
           </InputGroup>
         </ButtonToolbar>
@@ -133,14 +147,14 @@ const Cards = () => {
           </DropdownButton>
         )}
       </div>
-      {posts?.length === 0 && (
+      {filteredPosts?.length === 0 && (
         <Alert variant="warning" className="w-max mx-auto">
           There are no posts now!
         </Alert>
       )}
-      {posts?.length > 0 && (
+      {filteredPosts?.length > 0 && (
         <div className=" max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 place-items-center">
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <div key={post.id}>
               <SingleCard
                 post={post}
