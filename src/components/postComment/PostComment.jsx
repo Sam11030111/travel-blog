@@ -88,6 +88,36 @@ const PostComment = () => {
     }
   };
 
+  const handleDelete = async (commentId) => {
+    try {
+      const res = await fetch("http://localhost:3000/php/comments.php", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ commentId }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        console.log(data.message);
+        mutate();
+      }
+
+      if (data.error) {
+        setError(data.error);
+      }
+    } catch (error) {
+      console.log("Failed to delete comment:", error);
+      console.log("An error occurred while deleting the comment");
+    }
+  };
+
   return (
     <div className="mt-[50px]">
       <h1 className="text-xl font-bold mb-[30px]">Comments</h1>
@@ -117,19 +147,38 @@ const PostComment = () => {
         </Alert>
       )}
       <div className="mt-[30px]">
+        {userComments.length === 0 && (
+          <Alert variant="warning" className="w-max">
+            No comments now!
+          </Alert>
+        )}
         {userComments?.map((comment) => (
-          <div key={comment.id} className="mt-5 border-b w-full md:w-[80%]">
-            <div className="flex items-center gap-3 mb-3">
-              <img
-                src={comment.user.image || "/noavatar.png"}
-                className="w-10 border aspect-square rounded-full object-cover"
-              />
-              <div className="flex flex-col gap-1 text-[var(--softTextColor)]">
-                <span className="font-semibold">{comment.user.name}</span>
-                <span className="text-sm">{comment.createdAt}</span>
+          <div
+            key={comment.id}
+            className="mt-5 border-b w-full md:w-[80%] flex items-center justify-between"
+          >
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src={comment.user.image || "/noavatar.png"}
+                  className="w-10 border aspect-square rounded-full object-cover"
+                />
+                <div className="flex flex-col gap-1 text-[var(--softTextColor)]">
+                  <span className="font-semibold">{comment.user.name}</span>
+                  <span className="text-sm">{comment.createdAt}</span>
+                </div>
               </div>
+              <p className="text-md font-light mb-3">{comment.description}</p>
             </div>
-            <p className="text-md font-light mb-3">{comment.description}</p>
+            {(auth.user?.isAdmin === 1 || auth.user?.id === comment.userId) && (
+              <Button
+                variant="danger"
+                className="text-sm"
+                onClick={() => handleDelete(comment.id)}
+              >
+                DELETE
+              </Button>
+            )}
           </div>
         ))}
       </div>

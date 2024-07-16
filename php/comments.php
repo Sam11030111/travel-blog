@@ -3,7 +3,7 @@ require('connect.php');
 session_start();
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: GET, POST');
+header('Access-Control-Allow-Methods: GET, POST, DELETE');
 header('Content-Type: application/json');
 
 // GET comments in specific post
@@ -55,6 +55,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         echo json_encode(["error" => "Invalid input."]);
+    }
+}
+
+// DELETE a comment
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    if ($input && isset($input['commentId'])) {
+        $commentId = filter_var($input['commentId'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        // Prepare the SQL query
+        $query = $db->prepare('DELETE FROM comments WHERE id = :commentId');
+        $query->bindParam(':commentId', $commentId, PDO::PARAM_INT);
+
+        // Execute the query
+        if ($query->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Delete comment successfully!']);
+        } else {
+            echo json_encode(['error' => 'Failed to delete comment.']);
+        }
+    } else {
+        echo json_encode(['error' => 'Invalid input.']);
     }
 }
 ?>
