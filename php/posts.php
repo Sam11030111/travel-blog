@@ -8,6 +8,7 @@ header('Content-Type: application/json');
 
 // Get sorting criteria from query parameters
 $sortCriteria = isset($_GET['sort']) ? $_GET['sort'] : 'date_desc';
+$categoryFilter = isset($_GET['category']) ? $_GET['category'] : '0';
 
 // Define the sorting order based on the criteria
 switch ($sortCriteria) {
@@ -24,9 +25,21 @@ switch ($sortCriteria) {
         $orderBy = 'createdAt DESC';
 }
 
-// GET all posts with sorting
+// GET all posts with sorting and optional category filtering
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
-    $query = $db->prepare("SELECT * FROM travelposts ORDER BY $orderBy");
+    $queryStr = "SELECT * FROM travelposts";
+    if ($categoryFilter !== '0') {
+        $queryStr .= " WHERE categoryId = :categoryId";
+        $queryStr .= " ORDER BY $orderBy";
+        $query = $db->prepare($queryStr);
+        $query->bindParam(':categoryId', $categoryFilter, PDO::PARAM_STR);
+    }
+
+    if ($categoryFilter === '0') {
+        $queryStr .= " ORDER BY $orderBy";
+        $query = $db->prepare($queryStr);
+    }
+
     $query->execute();
 
     $posts = $query->fetchAll(PDO::FETCH_ASSOC);

@@ -6,35 +6,52 @@ import { AuthContext } from "../../context/AuthContext";
 import Alert from "react-bootstrap/Alert";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 import { IoFilterCircleOutline } from "react-icons/io5";
 import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { IoArrowUpCircleOutline } from "react-icons/io5";
 
 const Cards = () => {
   const { auth } = useContext(AuthContext);
-  const { categories, originalPosts } = useLoaderData();
+  const { categories: originalCategories, originalPosts } = useLoaderData();
   const [posts, setPosts] = useState(originalPosts);
   const [sortCriteria, setSortCriteria] = useState("date_desc");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("0");
+
+  // Create a new categories array with "All" included
+  const categories = [
+    { id: "0", title: "All", img: "" },
+    ...originalCategories,
+  ];
 
   const handleDeletePost = (postId) => {
     setPosts(posts.filter((post) => post.id !== postId));
   };
 
-  const fetchSortedPosts = async (sort) => {
+  const fetchPosts = async (categoryId, sort) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/php/posts.php?sort=${sort}`
+        `http://localhost:3000/php/posts.php?category=${categoryId}&sort=${sort}`
       );
-      const sortedPosts = await res.json();
-      setPosts(sortedPosts);
+      const filteredPosts = await res.json();
+      setPosts(filteredPosts);
     } catch (error) {
-      console.error("Failed to fetch sorted posts:", error);
+      console.error("Failed to fetch posts:", error);
     }
   };
 
   const handleSortSelect = (eventKey) => {
     setSortCriteria(eventKey);
-    fetchSortedPosts(eventKey);
+    fetchPosts(selectedCategoryId, eventKey);
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategoryId(category.id);
+    fetchPosts(category.id, sortCriteria);
   };
 
   const getSortButtonTitle = () => {
@@ -52,8 +69,34 @@ const Cards = () => {
 
   return (
     <div className="p-10">
-      {auth.isLoggedIn && (
-        <div className="mb-5">
+      <div className="mb-5 flex justify-between">
+        <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
+          <ButtonGroup className="me-2" aria-label="First group">
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                className={`${
+                  selectedCategoryId === category.id
+                    ? "bg-[var(--sortBtn)]"
+                    : "bg-[var(--navbarBg)] text-[var(--textColor)]"
+                }`}
+                onClick={() => handleCategorySelect(category)}
+              >
+                {category.title}
+              </Button>
+            ))}
+          </ButtonGroup>
+          <InputGroup>
+            <InputGroup.Text id="btnGroupAddon">@</InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Input group example"
+              aria-label="Input group example"
+              aria-describedby="btnGroupAddon"
+            />
+          </InputGroup>
+        </ButtonToolbar>
+        {auth.isLoggedIn && posts?.length > 0 && (
           <DropdownButton
             align="end"
             title={
@@ -88,8 +131,8 @@ const Cards = () => {
             <Dropdown.Divider />
             <Dropdown.Item eventKey="title">Title</Dropdown.Item>
           </DropdownButton>
-        </div>
-      )}
+        )}
+      </div>
       {posts?.length === 0 && (
         <Alert variant="warning" className="w-max mx-auto">
           There are no posts now!

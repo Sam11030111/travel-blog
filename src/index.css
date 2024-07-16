@@ -10,6 +10,7 @@
   --navbarBg: #e3e7ee;
   --cardBorder: #e3e7ee;
   --badgeColor: #182237;
+  --sortBtn: #94a3b8;
 }
 
 * {
@@ -29,6 +30,7 @@ body {
   --navbarBg: #182237;
   --cardBorder: black;
   --badgeColor: #e3e7ee;
+  --sortBtn: #1e3a8a;
 }
 
 .nav-link {
@@ -56,4 +58,24 @@ body {
 
 .dropdown-toggle::after {
   display: none;
+}
+
+.dropdown > .btn-primary {
+  --bs-btn-bg: var(--navbarBg);
+  --bs-btn-border-color: var(--navbarBg);
+  --bs-btn-color: var(--textColor);
+  --bs-btn-hover-bg: var(--sortBtn);
+  --bs-btn-hover-border-color: var(--navbarBg);
+  --bs-btn-hover-color: var(--textColor);
+  --bs-btn-active-bg: var(--sortBtn);
+  --bs-btn-active-border-color: var(--navbarBg);
+  --bs-btn-active-color: var(--textColor);
+}
+
+.btn-group > .btn-primary {
+  --bs-btn-border-color: var(--navbarBg);
+  --bs-btn-color: var(--textColor);
+  --bs-btn-hover-bg: var(--sortBtn);
+  --bs-btn-hover-border-color: var(--navbarBg);
+  --bs-btn-hover-color: var(--textColor);
 }
