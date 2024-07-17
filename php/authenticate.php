@@ -21,7 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($input['signup'])) {
         $name = filter_var($input['name'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $email = filter_var($input['email'] ?? '', FILTER_SANITIZE_EMAIL);
-        $password = $input['password'] ?? '';
+        $password = filter_var($input['password'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $confirmPassword = filter_var($input['confirmPassword'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $isAdmin = $input['isAdmin'] ?? 0;
         $image = filter_var($input['image'] ?? NULL, FILTER_SANITIZE_URL);
 
@@ -40,6 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Validate password length
         if (strlen($password) < 6) {
             echo json_encode(["error" => "Password must be more than 6 characters."]);
+            exit;
+        }
+
+        // Check if the passwords match
+        if ($password !== $confirmPassword) {
+            echo json_encode(["error" => "Passwords do not match."]);
             exit;
         }
 

@@ -79,8 +79,11 @@ const Cards = () => {
 
   return (
     <div className="p-10">
-      <div className="mb-5 flex justify-between">
-        <ButtonToolbar className="mb-3" aria-label="Toolbar with Button groups">
+      <div className="mb-5 flex flex-wrap justify-between">
+        <ButtonToolbar
+          className="mb-3 gap-3"
+          aria-label="Toolbar with Button groups"
+        >
           <ButtonGroup className="me-2" aria-label="First group">
             {categories.map((category) => (
               <Button

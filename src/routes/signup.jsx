@@ -15,6 +15,7 @@ const SignUp = () => {
 
   const emailRef = useRef();
   const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
   const nameRef = useRef();
   const [media, setMedia] = useState("");
   const [file, setFile] = useState(null);
@@ -42,6 +43,7 @@ const SignUp = () => {
           name: nameRef.current.value,
           email: emailRef.current.value,
           password: passwordRef.current.value,
+          confirmPassword: confirmPasswordRef.current.value,
           isAdmin,
           image: media,
         }),
@@ -119,7 +121,9 @@ const SignUp = () => {
             ref={emailRef}
           />
         </Form.Group>
+      </Row>
 
+      <Row className="mb-3">
         <Form.Group as={Col} controlId="formGridPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -127,6 +131,16 @@ const SignUp = () => {
             type="password"
             placeholder="Enter your Password"
             ref={passwordRef}
+          />
+        </Form.Group>
+
+        <Form.Group as={Col}>
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            name="confirmpassword"
+            type="password"
+            placeholder="Enter your Password Again"
+            ref={confirmPasswordRef}
           />
         </Form.Group>
       </Row>

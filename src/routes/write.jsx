@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
+import { IoMdCloseCircle } from "react-icons/io";
 import Lottie from "react-lottie";
 import animationData from "../lotties/share.json";
 import { AuthContext } from "../context/AuthContext.jsx";
@@ -120,12 +121,19 @@ const Write = () => {
         />
       </Form.Group>
       <Form.Group controlId="formFile" className="mb-3">
-        <Form.Label>Image</Form.Label>
+        <Form.Label className="mb-2">Image</Form.Label>
         {media && (
-          <img
-            src={media || post?.image}
-            className="w-[100px] aspect-square object-cover rounded-lg mb-3"
-          />
+          <div className="relative mb-3">
+            <img
+              src={media || post?.image}
+              className="w-[100px] aspect-square object-cover rounded-lg"
+            />
+            <IoMdCloseCircle
+              className="absolute top-[-10px] left-[-10px] text-red-500 cursor-pointer"
+              size={20}
+              onClick={() => setMedia("")}
+            />
+          </div>
         )}
         <Form.Control
           type="file"
