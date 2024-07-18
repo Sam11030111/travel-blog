@@ -41,3 +41,12 @@ export const singlePostLoader = async ({ params }) => {
 
   return { post, user, category };
 };
+
+// Loader for the SingleUser page
+export const singleUserLoader = async ({ params }) => {
+  const userId = params.userId;
+
+  const user = await fetchSpecificUser(userId);
+
+  return { user };
+};

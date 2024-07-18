@@ -17,6 +17,7 @@ import {
   exploreLoader,
   writeLoader,
   singlePostLoader,
+  singleUserLoader,
 } from "./utils/loader.js";
 import Home from "./components/home/Home.jsx";
 import Users from "./routes/users.jsx";
@@ -75,6 +76,7 @@ const router = createBrowserRouter([
           {
             path: ":userId",
             element: <SingleUser />,
+            loader: singleUserLoader,
           },
           {
             path: "add",
