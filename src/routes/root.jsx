@@ -3,9 +3,11 @@ import Header from "../components/header/Header";
 
 function Root() {
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--textColor)]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--textColor)]">
       <Header />
-      <Outlet />
+      <div className="flex-grow">
+        <Outlet />
+      </div>
     </div>
   );
 }

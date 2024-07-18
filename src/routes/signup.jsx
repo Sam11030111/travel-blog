@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
+import { IoMdCloseCircle } from "react-icons/io";
 
 import { AuthContext } from "../context/AuthContext.jsx";
 import { uploadFile } from "../utils/firebase.js";
@@ -78,13 +79,14 @@ const SignUp = () => {
   return (
     <Form
       onSubmit={handleSubmit}
-      className="p-10 w-[80%] sm:w-[600px] mx-auto mt-5 bg-[var(--navbarBg)] rounded-xl"
+      className="p-10 w-[80%] sm:w-[600px] mx-auto my-5 bg-[var(--navbarBg)] rounded-xl"
     >
       <Row className="mb-5 justify-center">
         <input
           type="file"
           id="image"
           name="image"
+          accept="image/*"
           style={{ display: "none" }}
           onChange={(event) => setFile(event.target.files[0])}
         />
@@ -109,6 +111,14 @@ const SignUp = () => {
           </label>
         </button>
         <p className="text-center text-sm">(Upload your profile image)</p>
+        <button
+          type="button"
+          className="flex items-center justify-center gap-1 cursor-pointer mt-2"
+          onClick={() => setMedia("")}
+        >
+          <IoMdCloseCircle className="text-red-500" size={20} />
+          Delete Image
+        </button>
       </Row>
 
       <Row className="mb-3">

@@ -19,6 +19,9 @@ import {
   singlePostLoader,
 } from "./utils/loader.js";
 import Home from "./components/home/Home.jsx";
+import Users from "./routes/users.jsx";
+import SingleUser from "./routes/singleUser.jsx";
+import AddUser from "./routes/addUser.jsx";
 
 const loadGoogleMapsScript = () => {
   const script = document.createElement("script");
@@ -62,6 +65,20 @@ const router = createBrowserRouter([
           {
             path: ":postId",
             element: <Write />,
+          },
+        ],
+      },
+      {
+        path: "/users",
+        element: <Users />,
+        children: [
+          {
+            path: ":userId",
+            element: <SingleUser />,
+          },
+          {
+            path: "add",
+            element: <AddUser />,
           },
         ],
       },

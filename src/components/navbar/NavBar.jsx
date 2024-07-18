@@ -57,6 +57,18 @@ const NavBar = () => {
                 Write
               </NavLink>
             )}
+            {auth.isLoggedIn && auth.user.isAdmin === 1 && (
+              <NavLink
+                to={`/users`}
+                className={({ isActive }) =>
+                  isActive
+                    ? "px-2 py-1 border-b-2 border-current"
+                    : "px-2 py-1 "
+                }
+              >
+                Users
+              </NavLink>
+            )}
           </Nav>
         </Navbar.Collapse>
         {!auth.isLoggedIn && (

@@ -79,14 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $fetchQuery->fetch(PDO::FETCH_ASSOC);
     
             if ($user) {
-                // Store the user information in the session
-                $_SESSION['user'] = [
-                    'id' => $user['id'],
-                    'name' => $user['name'],
-                    'email' => $user['email'],
-                    'image' => $user['image'],
-                    'isAdmin' => $user['isAdmin']
-                ];
+                if (!isset($input['isAdminAdd'])) {
+                    // Store the user information in the session
+                    $_SESSION['user'] = [
+                        'id' => $user['id'],
+                        'name' => $user['name'],
+                        'email' => $user['email'],
+                        'image' => $user['image'],
+                        'isAdmin' => $user['isAdmin']
+                    ];
+                }
                 echo json_encode(["message" => "User signed up successfully.", "user" => $_SESSION['user']]);
             } else {
                 echo json_encode(["error" => "Failed to retrieve user information."]);

@@ -99,7 +99,7 @@ const Write = () => {
   return (
     <Form
       onSubmit={handleSubmit}
-      className="p-10 w-[80%] sm:w-[600px] mx-auto mt-[60px] bg-[var(--navbarBg)] rounded-xl relative"
+      className="p-10 w-[80%] sm:w-[600px] mx-auto my-[60px] bg-[var(--navbarBg)] rounded-xl relative"
     >
       <div className="absolute top-[-60px] left-[-90px]">
         <Lottie options={defaultOptions} height={150} width={200} />
