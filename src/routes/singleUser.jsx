@@ -28,6 +28,7 @@ const SingleUser = () => {
   useEffect(() => {
     emailRef.current.value = user.email;
     nameRef.current.value = user.name;
+    setMedia(user.image);
     setIsAdmin(user.isAdmin);
   }, []);
 
