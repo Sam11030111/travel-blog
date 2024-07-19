@@ -106,7 +106,7 @@ const UsersTable = () => {
                           View
                         </Button>
                       </Link>
-                      {auth.user.id !== user.id && (
+                      {auth.user?.id !== user.id && (
                         <form>
                           <input type="hidden" name="id" />
                           <Button
